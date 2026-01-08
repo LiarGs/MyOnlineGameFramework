@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using ApplicationLifecycle.Messages;
 using Infrastructure;
+using Infrastructure.PubSub;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Utils;
 
 namespace ApplicationLifecycle
 {
@@ -14,10 +16,16 @@ namespace ApplicationLifecycle
         private void Start()
         {
             Application.wantsToQuit += _OnWantToQuit;
+            _Subscription = G.MessageChannels.QuitMessageChannel.Subscribe(_QuitGame);
             DontDestroyOnLoad(gameObject);
             DontDestroyOnLoad(_UpdateRunner.gameObject);
             Application.targetFrameRate = 120;
             SceneManager.LoadScene(MainSceneName);
+        }
+        
+        protected void OnDestroy()
+        {
+            _Subscription?.Dispose();
         }
         
         #endregion UnityBehavior
@@ -73,7 +81,7 @@ namespace ApplicationLifecycle
         
         public  string             MainSceneName =  "MainMenu";
         [SerializeField] private UpdateRunner       _UpdateRunner;
-        private                  IDisposable        _Subscriptions;
+        private                  IDisposable        _Subscription;
         
         #endregion Fields
     }
