@@ -11,39 +11,37 @@ namespace UI
 
         private void OnEnable()
         {
-            _HostButton.onClick.AddListener(OnHostButtonClicked);
-            _ClientButton.onClick.AddListener(OnClientButtonClicked);
-            _QuitButton.onClick.AddListener(OnQuitButtonClicked);
+            _HostButton.onClick.AddListener(_OnHostButtonClicked);
+            _ClientButton.onClick.AddListener(_OnClientButtonClicked);
+            _QuitButton.onClick.AddListener(_OnQuitButtonClicked);
         }
 
         private void OnDisable()
         {
-            _HostButton.onClick.RemoveListener(OnHostButtonClicked);
-            _ClientButton.onClick.RemoveListener(OnClientButtonClicked);
-            _QuitButton.onClick.RemoveListener(OnQuitButtonClicked);
+            _HostButton.onClick.RemoveListener(_OnHostButtonClicked);
+            _ClientButton.onClick.RemoveListener(_OnClientButtonClicked);
+            _QuitButton.onClick.RemoveListener(_OnQuitButtonClicked);
         }
 
         #endregion UnityBehavior
 
         #region PrivateMethods
 
-        private void OnHostButtonClicked()
+        private void _OnHostButtonClicked()
         {
-            G.NetworkManager.StartHost();
-            gameObject.SetActive(false);
-        }
-        
-        private void OnClientButtonClicked()
-        {
-            G.NetworkManager.StartClient();
-            gameObject.SetActive(false);
+            G.ConnectionManager.StartHostIp("server", "127.0.0.1", 9998);
         }
 
-        private static void OnQuitButtonClicked()
+        private void _OnClientButtonClicked()
+        {
+            G.ConnectionManager.StartClientIp("client", "127.0.0.1", 9998);
+        }
+
+        private static void _OnQuitButtonClicked()
         {
             G.MessageChannels.QuitMessageChannel.Publish(new QuitApplicationMessage());
         }
-        
+
         #endregion PrivateMethods
 
         #region Fields

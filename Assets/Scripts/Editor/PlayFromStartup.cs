@@ -18,8 +18,7 @@ public class PlayFromStartup
     [MenuItem(MenuPath)]
     public static void ToggleAction()
     {
-        // 切换布尔值状态
-        bool isEnabled = !EditorPrefs.GetBool(SettingKey, false);
+        var isEnabled = !EditorPrefs.GetBool(SettingKey, false);
         EditorPrefs.SetBool(SettingKey, isEnabled);
         
         _UpdatePlayModeStartScene();
@@ -37,11 +36,11 @@ public class PlayFromStartup
 
     private static void _UpdatePlayModeStartScene()
     {
-        bool isEnabled = EditorPrefs.GetBool(SettingKey, false);
+        var isEnabled = EditorPrefs.GetBool(SettingKey, false);
 
         if (isEnabled)
         {
-            SceneAsset scene = AssetDatabase.LoadAssetAtPath<SceneAsset>(StartupScenePath);
+            var scene = AssetDatabase.LoadAssetAtPath<SceneAsset>(StartupScenePath);
             if (scene != null)
                 EditorSceneManager.playModeStartScene = scene;
             else

@@ -1,33 +1,30 @@
 using System;
 using System.Collections;
 using ApplicationLifecycle.Messages;
-using Infrastructure;
-using Infrastructure.PubSub;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils;
 
 namespace ApplicationLifecycle
 {
-    public class ApplicationController:MonoBehaviour
+    public class ApplicationController : MonoBehaviour
     {
         #region UnityBehavior
-        
+
         private void Start()
         {
             Application.wantsToQuit += _OnWantToQuit;
-            _Subscription = G.MessageChannels.QuitMessageChannel.Subscribe(_QuitGame);
+            _Subscription           =  G.MessageChannels.QuitMessageChannel.Subscribe(_QuitGame);
             DontDestroyOnLoad(gameObject);
-            DontDestroyOnLoad(_UpdateRunner.gameObject);
             Application.targetFrameRate = 120;
             SceneManager.LoadScene(MainSceneName);
         }
-        
+
         protected void OnDestroy()
         {
             _Subscription?.Dispose();
         }
-        
+
         #endregion UnityBehavior
 
         #region PrivateMethods
@@ -55,14 +52,14 @@ namespace ApplicationLifecycle
         private bool _OnWantToQuit()
         {
             Application.wantsToQuit -= _OnWantToQuit;
-            
+
             var canQuit = true;
             // var canQuit = _LocalLobby != null && string.IsNullOrEmpty(_LocalLobby.LobbyID);
             if (!canQuit)
             {
                 StartCoroutine(_LeaveBeforeQuit());
             }
-            
+
             return canQuit;
         }
 
@@ -76,13 +73,12 @@ namespace ApplicationLifecycle
         }
 
         #endregion PrivateMethods
-       
+
         #region Fields
-        
-        public  string             MainSceneName =  "MainMenu";
-        [SerializeField] private UpdateRunner       _UpdateRunner;
-        private                  IDisposable        _Subscription;
-        
+
+        public  string      MainSceneName = "MainMenu";
+        private IDisposable _Subscription;
+
         #endregion Fields
     }
 }
