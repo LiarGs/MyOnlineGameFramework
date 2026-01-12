@@ -15,4 +15,4 @@ MonoBehaviour:
   MoveSpeed: 4
   RotationSpeed: 15
   GravityForce: -10
-  ShouldMockGravity: 0
+  ShouldMockGravity: 1

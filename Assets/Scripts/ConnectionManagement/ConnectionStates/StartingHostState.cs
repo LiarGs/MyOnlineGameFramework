@@ -43,14 +43,12 @@ namespace ConnectionManagement.ConnectionStates
             if (clientId == G.NetworkManager.LocalClientId)
             {
                 var payload = System.Text.Encoding.UTF8.GetString(connectionData);
-                var connectionPayload =
-                    JsonUtility.FromJson<ConnectionPayload>(
-                        payload); // https://docs.unity3d.com/2020.2/Documentation/Manual/JSONSerialization.html
+                // https://docs.unity3d.com/2020.2/Documentation/Manual/JSONSerialization.html
+                var connectionPayload = JsonUtility.FromJson<ConnectionPayload>(payload);
 
                 // SessionManager<SessionPlayerData>.Instance.SetupConnectingPlayerSessionData(clientId, connectionPayload.PlayerId,
                 //     new SessionPlayerData(clientId, connectionPayload.PlayerName, new NetworkGuid(), 0, true));
 
-                // connection approval will create a player object for you
                 response.Approved           = true;
                 response.CreatePlayerObject = true;
             }
@@ -65,7 +63,7 @@ namespace ConnectionManagement.ConnectionStates
 
         #region PrivateMethods
 
-        private void _StartHost()
+        private static void _StartHost()
         {
             try
             {
@@ -84,7 +82,7 @@ namespace ConnectionManagement.ConnectionStates
             }
         }
 
-        private void _StartHostFailed()
+        private static void _StartHostFailed()
         {
             _ConnectStatusPublisher.Publish(ConnectStatus.StartHostFailed);
             _ConnectionManager.ChangeState(_ConnectionManager.Offline);

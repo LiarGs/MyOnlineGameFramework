@@ -6,10 +6,12 @@ namespace GamePlay.Objects.Actors
 {
     public class PlayerController : ActorControllerBase
     {
-        #region PublicMeythods
+        #region PublicMethods
 
         public PlayerController(Brain actorBrain) : base(actorBrain)
         {
+            if (!_ActorBrain.IsOwner) return;
+            _SetupCamera();
             G.UpdateRunner.Subscribe(_Tick, 0);
         }
 
@@ -18,28 +20,32 @@ namespace GamePlay.Objects.Actors
             G.UpdateRunner.Unsubscribe(_Tick);
         }
 
-        #endregion PublicMeythods
+        #endregion PublicMethods
 
         #region PrivateMethods
 
+        private void _SetupCamera()
+        {
+            G.MainCamera.CineMachineVirtualCamera.Follow = _ActorBrain.transform;
+            G.MainCamera.CineMachineVirtualCamera.LookAt = _ActorBrain.LookAtPos;
+        }
+
         private void _Tick(float deltaTime)
         {
-            var moveDirection = G.UserController.VerticalInput * G.CurrentCamera.transform.forward;
-            moveDirection += G.UserController.HorizontalInput * G.CurrentCamera.transform.right;
+            _HandleMove();
+        }
 
-            moveDirection = Quaternion.FromToRotation(Vector3.up, ActorBrain.ActorCharacterController.transform.up) *
+        private void _HandleMove()
+        {
+            var moveDirection = G.UserController.VerticalInput * G.MainCamera.transform.forward;
+            moveDirection += G.UserController.HorizontalInput * G.MainCamera.transform.right;
+
+            moveDirection = Quaternion.FromToRotation(Vector3.up, _ActorBrain.ActorCharacterController.transform.up) *
                             moveDirection;
 
-            _CachedMoveCommand.Reset(moveDirection, G.UserController.MoveAmount);
-            ActorBrain.ExecuteCommand(_CachedMoveCommand);
+            _ActorBrain.ExecuteCommand(new MoveCommand(moveDirection, G.UserController.MoveAmount));
         }
 
         #endregion PrivateMethods
-
-        #region Fields
-
-        private readonly MoveCommand _CachedMoveCommand = new MoveCommand(Vector3.zero, 0f);
-
-        #endregion Fields
     }
 }

@@ -1,5 +1,6 @@
 ﻿using GamePlay.Configuration.Capabilities;
 using GamePlay.Objects.Actors;
+using Unity.Netcode;
 using UnityEngine;
 using Utils;
 
@@ -9,13 +10,10 @@ namespace GamePlay.Capabilities
     {
         #region UnityBehavior
 
-        private void FixedUpdate()
+        private void Update()
         {
-            if (PlanarVelocity.magnitude > 0.1f)
-            {
-                _HandleMove();
-                _HandleRotation();
-            }
+            _HandleMoveServerRpc(PlanarVelocity, MoveAmount);
+            _HandleRotationServerRpc(PlanarVelocity);
 
             if (Config.ShouldMockGravity)
             {
@@ -31,16 +29,18 @@ namespace GamePlay.Capabilities
 
         #region PrivateMethods
 
-        private void _HandleMove()
+        [ServerRpc]
+        private void _HandleMoveServerRpc(Vector3 planarVelocity, float moveAmount)
         {
-            PlanarVelocity.y = 0;
-            ActorBrain.ActorCharacterController.Move(PlanarVelocity * (Config.MoveSpeed * G.DeltaTime));
-            // ActorBrain.AnimatorManager?.UpdateAnimatorMovementParameters(0, MoveAmount);
+            planarVelocity.y = 0;
+            ActorBrain.ActorCharacterController.Move(planarVelocity * (Config.MoveSpeed * G.DeltaTime));
+            ActorBrain.AnimatorManager?.UpdateAnimatorMovementParameters(0, moveAmount);
         }
 
-        private void _HandleRotation()
+        [ServerRpc]
+        private void _HandleRotationServerRpc(Vector3 planarVelocity)
         {
-            var rotationDirection = transform.InverseTransformDirection(PlanarVelocity);
+            var rotationDirection = transform.InverseTransformDirection(planarVelocity);
             rotationDirection.y = 0;
             rotationDirection   = transform.TransformDirection(rotationDirection);
 

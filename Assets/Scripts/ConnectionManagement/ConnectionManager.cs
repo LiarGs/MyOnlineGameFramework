@@ -16,37 +16,41 @@ namespace ConnectionManagement
 
         private void Awake()
         {
-            if (Instance == null)
+            if (Instance != null && Instance != this)
             {
-                Instance = this;
-                DontDestroyOnLoad(gameObject);
+                Destroy(Instance.gameObject);
+                return;
             }
-            else
-            {
-                Destroy(gameObject);
-            }
+
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
 
         private void Start()
         {
             _CurrentState = Offline;
 
-            G.NetworkManager.OnClientConnectedCallback  += _OnClientConnectedCallback;
-            G.NetworkManager.OnClientDisconnectCallback += _OnClientDisconnectCallback;
             G.NetworkManager.OnServerStarted            += _OnServerStarted;
-            // G.NetworkManager.ConnectionApprovalCallback += _ApprovalCheck;
-            G.NetworkManager.OnTransportFailure += _OnTransportFailure;
-            G.NetworkManager.OnServerStopped    += _OnServerStopped;
+            G.NetworkManager.ConnectionApprovalCallback += _ApprovalCheck;
+            G.NetworkManager.OnClientConnectedCallback  += _OnClientConnectedCallback;
+            G.NetworkManager.OnTransportFailure         += _OnTransportFailure;
+            G.NetworkManager.OnServerStopped            += _OnServerStopped;
+            G.NetworkManager.OnClientDisconnectCallback += _OnClientDisconnectCallback;
         }
 
         private void OnDestroy()
         {
-            G.NetworkManager.OnClientConnectedCallback  -= _OnClientConnectedCallback;
-            G.NetworkManager.OnClientDisconnectCallback -= _OnClientDisconnectCallback;
+            if (G.NetworkManager == null)
+            {
+                return;
+            }
+
             G.NetworkManager.OnServerStarted            -= _OnServerStarted;
-            // G.NetworkManager.ConnectionApprovalCallback -= _ApprovalCheck;
-            G.NetworkManager.OnTransportFailure -= _OnTransportFailure;
-            G.NetworkManager.OnServerStopped    -= _OnServerStopped;
+            G.NetworkManager.ConnectionApprovalCallback -= _ApprovalCheck;
+            G.NetworkManager.OnClientConnectedCallback  -= _OnClientConnectedCallback;
+            G.NetworkManager.OnTransportFailure         -= _OnTransportFailure;
+            G.NetworkManager.OnServerStopped            -= _OnServerStopped;
+            G.NetworkManager.OnClientDisconnectCallback -= _OnClientDisconnectCallback;
         }
 
         #endregion UnityBehavior
@@ -134,8 +138,8 @@ namespace ConnectionManagement
 
         #region Fields
 
-        public static ConnectionManager Instance;
-        public        int               MaxConnectedPlayers = 8;
+        internal static ConnectionManager Instance;
+        public          int               MaxConnectedPlayers = 8;
 
         internal readonly OfflineState            Offline            = new OfflineState();
         internal readonly ClientConnectingState   ClientConnecting   = new ClientConnectingState();

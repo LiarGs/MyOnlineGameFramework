@@ -12,21 +12,20 @@ namespace Utils.SceneManagement
     {
         #region UnityBehavior
 
-        public virtual void Awake()
+        public void Awake()
         {
-            if (Instance != null && Instance != this)
+            if (Instance == null)
             {
-                Destroy(gameObject);
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
             }
             else
             {
-                Instance = this;
+                Destroy(gameObject);
             }
-
-            DontDestroyOnLoad(this);
         }
 
-        public virtual void Start()
+        public void Start()
         {
             SceneManager.sceneLoaded       += _OnSceneLoaded;
             NetworkManager.OnServerStarted += _OnNetworkingSessionStarted;
@@ -61,8 +60,8 @@ namespace Utils.SceneManagement
         /// <param name="sceneName">Name or path of the Scene to load.</param>
         /// <param name="useNetworkSceneManager">If true, uses NetworkSceneManager, else uses SceneManager</param>
         /// <param name="loadSceneMode">If LoadSceneMode.Single then all current Scenes will be unloaded before loading.</param>
-        public virtual void LoadScene(string sceneName, bool useNetworkSceneManager,
-            LoadSceneMode                    loadSceneMode = LoadSceneMode.Single)
+        public void LoadScene(string sceneName, bool useNetworkSceneManager,
+            LoadSceneMode            loadSceneMode = LoadSceneMode.Single)
         {
             if (useNetworkSceneManager)
             {
@@ -219,7 +218,7 @@ namespace Utils.SceneManagement
 
         #region Fields
 
-        public static SceneLoaderWrapper Instance;
+        internal static SceneLoaderWrapper Instance;
         // [SerializeField] private ClientLoadingScreen _ClientLoadingScreen;
         //
         // [SerializeField] private LoadingProgressManager _LoadingProgressManager;

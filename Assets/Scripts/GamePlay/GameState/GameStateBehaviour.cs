@@ -100,6 +100,6 @@ namespace GamePlay.GameState
     {
         MainMenu,
         CharSelect,
-        DebugTest
+        Demo
     }
 }

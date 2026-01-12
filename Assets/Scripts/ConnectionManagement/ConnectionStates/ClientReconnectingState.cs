@@ -16,10 +16,10 @@ namespace ConnectionManagement.ConnectionStates
     {
         #region PublicMethods
 
-         public override void Enter()
+        public override void Enter()
         {
-            _NbAttempts = 0;
-            _ReconnectCoroutineInstance = _ConnectionManager.StartCoroutine(ReconnectCoroutine());
+            _NbAttempts                 = 0;
+            _ReconnectCoroutineInstance = _ConnectionManager.StartCoroutine(_ReconnectCoroutine());
         }
 
         public override void Exit()
@@ -44,7 +44,7 @@ namespace ConnectionManagement.ConnectionStates
             {
                 if (string.IsNullOrEmpty(disconnectReason))
                 {
-                    _ReconnectCoroutineInstance = _ConnectionManager.StartCoroutine(ReconnectCoroutine());
+                    _ReconnectCoroutineInstance = _ConnectionManager.StartCoroutine(_ReconnectCoroutine());
                 }
                 else
                 {
@@ -59,7 +59,7 @@ namespace ConnectionManagement.ConnectionStates
                             _ConnectionManager.ChangeState(_ConnectionManager.Offline);
                             break;
                         default:
-                            _ReconnectCoroutineInstance = _ConnectionManager.StartCoroutine(ReconnectCoroutine());
+                            _ReconnectCoroutineInstance = _ConnectionManager.StartCoroutine(_ReconnectCoroutine());
                             break;
                     }
                 }
@@ -84,7 +84,7 @@ namespace ConnectionManagement.ConnectionStates
 
         #region PrivateMethods
 
-        private IEnumerator ReconnectCoroutine()
+        private IEnumerator _ReconnectCoroutine()
         {
             // If not on first attempt, wait some time before trying again, so that if the issue causing the disconnect
             // is temporary, it has time to fix itself before we try again. Here we are using a simple fixed cooldown
@@ -99,7 +99,9 @@ namespace ConnectionManagement.ConnectionStates
 
             G.NetworkManager.Shutdown();
 
-            yield return new WaitWhile(() => G.NetworkManager.ShutdownInProgress); // wait until NetworkManager completes shutting down
+            yield return
+                new WaitWhile(() =>
+                    G.NetworkManager.ShutdownInProgress); // wait until NetworkManager completes shutting down
             Debug.Log($"Reconnecting attempt {_NbAttempts + 1}/{_ConnectionManager.NbReconnectAttempts}...");
             // _ReconnectMessagePublisher.Publish(new ReconnectMessage(_NbAttempts, _ConnectionManager.NbReconnectAttempts));
 
@@ -128,21 +130,22 @@ namespace ConnectionManagement.ConnectionStates
                     // setting number of attempts to max so no new attempts are made
                     _NbAttempts = _ConnectionManager.NbReconnectAttempts;
                 }
+
                 // Calling OnClientDisconnect to mark this attempt as failed and either start a new one or give up
                 // and return to the Offline state
                 OnClientDisconnect(0);
             }
         }
-   
+
         #endregion PrivateMethods
 
         #region Fields
 
         // [Inject] private IPublisher<ReconnectMessage> _ReconnectMessagePublisher;
-        private          Coroutine                    _ReconnectCoroutineInstance;
-        private          int                          _NbAttempts;
-        private const    float                        _TimeBeforeFirstAttempt = 1;
-        private const    float                        _TimeBetweenAttempts    = 5;
+        private       Coroutine _ReconnectCoroutineInstance;
+        private       int       _NbAttempts;
+        private const float     _TimeBeforeFirstAttempt = 1;
+        private const float     _TimeBetweenAttempts    = 5;
 
         #endregion Fields
     }

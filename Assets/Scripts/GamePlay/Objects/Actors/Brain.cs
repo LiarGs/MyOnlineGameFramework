@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using GamePlay.Action;
 using GamePlay.Capabilities;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace GamePlay.Objects.Actors
 {
-    public class Brain : MonoBehaviour
+    public class Brain : NetworkBehaviour
     {
         #region UnityBehaviour
 
@@ -18,6 +19,11 @@ namespace GamePlay.Objects.Actors
                 _CapabilityMap[capability.GetType()] = capability;
             }
 
+            AnimatorManager = new ActorAnimatorManager(ActorAnimator);
+        }
+
+        public override void OnNetworkSpawn()
+        {
             _ResetController();
         }
 
@@ -26,9 +32,10 @@ namespace GamePlay.Objects.Actors
             _ExecuteCommands();
         }
 
-        private void OnDestroy()
+        public override void OnDestroy()
         {
             _ActorController.Dispose();
+            base.OnDestroy();
         }
 
         private void OnValidate()
@@ -50,7 +57,7 @@ namespace GamePlay.Objects.Actors
                 return (T)capability;
             }
 
-            return null;
+            throw new Exception($"Capability not found in {gameObject.name}.");
         }
 
         public void AddCapability(CapabilityBase capability)
@@ -63,12 +70,12 @@ namespace GamePlay.Objects.Actors
             _CapabilityMap.Remove(capability.GetType());
         }
 
-        public void AddCommand(CommandBase command)
+        public void AddCommand(ICommand command)
         {
             _CommandStream.Enqueue(command);
         }
 
-        public void ExecuteCommand(CommandBase command)
+        public void ExecuteCommand(ICommand command)
         {
             command.Execute(this);
         }
@@ -127,14 +134,17 @@ namespace GamePlay.Objects.Actors
 
         #region Fields
 
-        public Animator            ActorAnimator;
-        public CharacterController ActorCharacterController;
-        public Rigidbody           Rigidbody;
+        public Transform            LookAtPos;
+        public Animator             ActorAnimator;
+        public CharacterController  ActorCharacterController;
+        public Rigidbody            Rigidbody;
+        public ActorAnimatorManager AnimatorManager;
 
-        [SerializeField] private ControlType _ControlBy = ControlType.None;
-        private ActorControllerBase _ActorController;
-        private Dictionary<Type, CapabilityBase> _CapabilityMap = new Dictionary<Type, CapabilityBase>();
-        private Queue<CommandBase> _CommandStream = new Queue<CommandBase>();
+        [SerializeField] private ControlType         _ControlBy = ControlType.None;
+        private                  ActorControllerBase _ActorController;
+
+        private readonly Dictionary<Type, CapabilityBase> _CapabilityMap = new Dictionary<Type, CapabilityBase>();
+        private readonly Queue<ICommand>                  _CommandStream = new Queue<ICommand>();
 
         #endregion Fields
     }

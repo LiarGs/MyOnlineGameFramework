@@ -1,4 +1,5 @@
 ﻿using ApplicationLifecycle.Messages;
+using CameraUtils;
 using ConnectionManagement;
 using GamePlay.UserInput;
 using Infrastructure;
@@ -13,7 +14,7 @@ namespace Utils
     {
         #region Fields
 
-        public static Camera             CurrentCamera      => Camera.main;
+        public static MainCameraWrapper  MainCamera         => MainCameraWrapper.Instance;
         public static UserController     UserController     => UserController.Instance;
         public static UpdateRunner       UpdateRunner       => UpdateRunner.Instance;
         public static SceneLoaderWrapper SceneLoaderWrapper => SceneLoaderWrapper.Instance;

@@ -106,7 +106,7 @@ namespace Infrastructure
             public float LastCallTime;
         }
 
-        public static UpdateRunner Instance;
+        internal static UpdateRunner Instance;
 
         private readonly Queue<Action>                             _PendingHandlers = new();
         private readonly Dictionary<Action<float>, SubscriberData> _SubscriberData  = new();

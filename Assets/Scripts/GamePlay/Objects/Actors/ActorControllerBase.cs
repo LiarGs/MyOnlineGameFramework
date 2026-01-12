@@ -8,7 +8,7 @@ namespace GamePlay.Objects.Actors
 
         protected ActorControllerBase(Brain actorBrain)
         {
-            ActorBrain = actorBrain;
+            _ActorBrain = actorBrain;
         }
 
         public virtual void Dispose()
@@ -19,7 +19,7 @@ namespace GamePlay.Objects.Actors
 
         #region Fields
 
-        public Brain ActorBrain;
+        protected readonly Brain _ActorBrain;
 
         #endregion Fields
     }

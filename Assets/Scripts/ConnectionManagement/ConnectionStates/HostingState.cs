@@ -1,8 +1,6 @@
-using Infrastructure.PubSub;
 using Unity.Netcode;
 using UnityEngine;
 using Utils;
-using Utils.SceneManagement;
 
 namespace ConnectionManagement.ConnectionStates
 {
@@ -16,7 +14,7 @@ namespace ConnectionManagement.ConnectionStates
 
         public override void Enter()
         {
-            G.SceneLoaderWrapper.LoadScene("DebugTest", useNetworkSceneManager: true);
+            G.SceneLoaderWrapper.LoadScene(_DemoSceneName, useNetworkSceneManager: true);
         }
 
         public override void Exit()
@@ -39,10 +37,10 @@ namespace ConnectionManagement.ConnectionStates
             var reason = JsonUtility.ToJson(ConnectStatus.HostEndedSession);
             for (var i = G.NetworkManager.ConnectedClientsIds.Count - 1; i >= 0; i--)
             {
-                var id = G.NetworkManager.ConnectedClientsIds[i];
-                if (id != G.NetworkManager.LocalClientId)
+                var clientID = G.NetworkManager.ConnectedClientsIds[i];
+                if (clientID != G.NetworkManager.LocalClientId)
                 {
-                    G.NetworkManager.DisconnectClient(id, reason);
+                    G.NetworkManager.DisconnectClient(clientID, reason);
                 }
             }
 
@@ -72,27 +70,40 @@ namespace ConnectionManagement.ConnectionStates
         public override void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request,
             NetworkManager.ConnectionApprovalResponse                               response)
         {
+            var connectionData = request.Payload;
+            if (connectionData.Length > _MaxConnectPayload)
+            {
+                // If connectionData too high, deny immediately to avoid wasting time on the server. This is intended as
+                // a bit of light protection against DOS attacks that rely on sending silly big buffers of garbage.
+                response.Approved = false;
+                return;
+            }
+
+            response.Approved           = true;
+            response.CreatePlayerObject = true;
         }
 
         #endregion PublicMethods
 
         #region PrivateMethods
 
-        // private ConnectStatus _GetConnectStatus(ConnectionPayload connectionPayload)
-        // {
-        //     if (G.NetworkManager.ConnectedClientsIds.Count >= _ConnectionManager.MaxConnectedPlayers)
-        //     {
-        //         return ConnectStatus.ServerFull;
-        //     }
-        //
-        //     if (connectionPayload.IsDebug != Debug.isDebugBuild)
-        //     {
-        //         return ConnectStatus.IncompatibleBuildType;
-        //     }
-        //
-        //     return SessionManager<SessionPlayerData>.Instance.IsDuplicateConnection(connectionPayload.PlayerId) ?
-        //         ConnectStatus.LoggedInAgain : ConnectStatus.Success;
-        // }
+        private ConnectStatus _GetConnectStatus(ConnectionPayload connectionPayload)
+        {
+            if (G.NetworkManager.ConnectedClientsIds.Count >= _ConnectionManager.MaxConnectedPlayers)
+            {
+                return ConnectStatus.ServerFull;
+            }
+
+            if (connectionPayload.IsDebug != Debug.isDebugBuild)
+            {
+                return ConnectStatus.IncompatibleBuildType;
+            }
+
+            // return SessionManager<SessionPlayerData>.Instance.IsDuplicateConnection(connectionPayload.PlayerId)
+            //     ? ConnectStatus.LoggedInAgain
+            //     : ConnectStatus.Success;
+            return ConnectStatus.Success;
+        }
 
         #endregion PrivateMethods
 
@@ -100,6 +111,8 @@ namespace ConnectionManagement.ConnectionStates
 
         // used in ApprovalCheck. This is intended as a bit of light protection against DOS attacks that rely on sending silly big buffers of garbage.
         private const int _MaxConnectPayload = 1024;
+
+        private const string _DemoSceneName = "Demo";
 
         #endregion Fields
     }

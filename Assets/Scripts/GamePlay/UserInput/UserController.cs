@@ -11,14 +11,12 @@ namespace GamePlay.UserInput
         {
             if (Instance != null && Instance != this)
             {
-                Destroy(gameObject);
+                Destroy(Instance.gameObject);
             }
-            else
-            {
-                Instance         = this;
-                _InputController = new UserInputController();
-                DontDestroyOnLoad(gameObject);
-            }
+
+            Instance         = this;
+            _InputController = new UserInputController();
+            DontDestroyOnLoad(gameObject);
         }
 
         private void OnEnable()
@@ -125,7 +123,7 @@ namespace GamePlay.UserInput
 
         #region Fields
 
-        public static UserController Instance;
+        internal static UserController Instance;
 
         private UserInputController _InputController;
         private InputDevice         _CurrentControllerDevice;
