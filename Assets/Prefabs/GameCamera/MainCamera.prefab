@@ -185,4 +185,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d33859bd3bef487894599babde01633e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CineMachineVirtualCamera: {fileID: 0}
+  CineMachineBrain: {fileID: 8487579826207722638}

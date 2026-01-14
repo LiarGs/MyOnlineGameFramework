@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GamePlay.Objects.Actors
+namespace GamePlay.Actors
 {
     public abstract class ActorControllerBase : IDisposable
     {
@@ -11,9 +11,7 @@ namespace GamePlay.Objects.Actors
             _ActorBrain = actorBrain;
         }
 
-        public virtual void Dispose()
-        {
-        }
+        public abstract void Dispose();
 
         #endregion PublicMethods
 

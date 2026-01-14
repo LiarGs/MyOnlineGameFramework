@@ -1,6 +1,6 @@
 ﻿using System;
+using GamePlay.Actors;
 using GamePlay.Capabilities;
-using GamePlay.Objects.Actors;
 using Unity.Netcode;
 using UnityEngine;
 

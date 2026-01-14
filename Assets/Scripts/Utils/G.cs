@@ -10,19 +10,19 @@ using Utils.SceneManagement;
 
 namespace Utils
 {
+    // Service Locator 无法控制 Scope 
     public static class G
     {
         #region Fields
 
         public static MainCameraWrapper  MainCamera         => MainCameraWrapper.Instance;
-        public static UserController     UserController     => UserController.Instance;
+        public static UserInput          UserInput          => UserInput.Instance;
         public static UpdateRunner       UpdateRunner       => UpdateRunner.Instance;
         public static SceneLoaderWrapper SceneLoaderWrapper => SceneLoaderWrapper.Instance;
         public static ConnectionManager  ConnectionManager  => ConnectionManager.Instance;
         public static NetworkManager     NetworkManager     => NetworkManager.Singleton;
-
-        public static bool  UseUnscaledDeltaTime = false;
-        public static float DeltaTime => UseUnscaledDeltaTime ? Time.unscaledDeltaTime : Time.deltaTime;
+        public static bool               UseUnscaledDeltaTime = false;
+        public static float              DeltaTime => UseUnscaledDeltaTime ? Time.unscaledDeltaTime : Time.deltaTime;
 
         #endregion Fields
 

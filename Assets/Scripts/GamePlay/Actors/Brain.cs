@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using GameData.Actors;
 using GamePlay.Action;
 using GamePlay.Capabilities;
+using GamePlay.Managers;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace GamePlay.Objects.Actors
+namespace GamePlay.Actors
 {
     public class Brain : NetworkBehaviour
     {
@@ -18,8 +20,6 @@ namespace GamePlay.Objects.Actors
             {
                 _CapabilityMap[capability.GetType()] = capability;
             }
-
-            AnimatorManager = new ActorAnimatorManager(ActorAnimator);
         }
 
         public override void OnNetworkSpawn()
@@ -34,16 +34,15 @@ namespace GamePlay.Objects.Actors
 
         public override void OnDestroy()
         {
-            _ActorController.Dispose();
+            _CurrentActorController?.Dispose();
             base.OnDestroy();
         }
 
         private void OnValidate()
         {
-            if (Application.isPlaying)
-            {
-                _ResetController();
-            }
+            if (!Application.isPlaying) return;
+
+            _ResetController();
         }
 
         #endregion UnityBehaviour
@@ -94,65 +93,24 @@ namespace GamePlay.Objects.Actors
 
         private void _ResetController()
         {
-            if (_ActorController != null)
-            {
-                _ActorController.Dispose();
-                _ActorController = null;
-            }
+            _CurrentActorController?.Dispose();
 
-            switch (_ControlBy)
-            {
-                case ControlType.Player:
-                    _ActorController = new PlayerController(this);
-                    break;
-                case ControlType.AI:
-                    _ActorController = new AIController(this);
-                    break;
-                case ControlType.None:
-                default:
-                    break;
-            }
+            _CurrentActorController = ActorControllerConfig?.CreateActorController(this);
         }
 
         #endregion PrivateMethods
 
-        #region Porperties
-
-        public ControlType ControlBy
-        {
-            get => _ControlBy;
-            set
-            {
-                if (_ControlBy == value) return;
-
-                _ControlBy = value;
-                _ResetController();
-            }
-        }
-
-        #endregion Porperties
-
         #region Fields
 
-        public Transform            LookAtPos;
-        public Animator             ActorAnimator;
-        public CharacterController  ActorCharacterController;
-        public Rigidbody            Rigidbody;
-        public ActorAnimatorManager AnimatorManager;
+        public ActorControllerConfigBase ActorControllerConfig;
+        public Transform                 LookAtPos;
+        public CharacterController       ActorCharacterController;
+        public AnimatorManagerBase       AnimatorManager;
 
-        [SerializeField] private ControlType         _ControlBy = ControlType.None;
-        private                  ActorControllerBase _ActorController;
-
+        private          ActorControllerBase              _CurrentActorController;
         private readonly Dictionary<Type, CapabilityBase> _CapabilityMap = new Dictionary<Type, CapabilityBase>();
         private readonly Queue<ICommand>                  _CommandStream = new Queue<ICommand>();
 
         #endregion Fields
-    }
-
-    public enum ControlType
-    {
-        None,
-        Player,
-        AI
     }
 }

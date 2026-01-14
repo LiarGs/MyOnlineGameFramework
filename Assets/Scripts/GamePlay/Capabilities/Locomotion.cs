@@ -1,5 +1,5 @@
-﻿using GamePlay.Configuration.Capabilities;
-using GamePlay.Objects.Actors;
+﻿using GamePlay.Actors;
+using GamePlay.Configuration.Capabilities;
 using Unity.Netcode;
 using UnityEngine;
 using Utils;
@@ -12,10 +12,22 @@ namespace GamePlay.Capabilities
 
         private void Update()
         {
-            _HandleMoveServerRpc(PlanarVelocity, MoveAmount);
-            _HandleRotationServerRpc(PlanarVelocity);
+            if (!ActorBrain.IsOwner) return;
 
-            if (Config.ShouldMockGravity)
+            _HandleLocomotionServerRpc(PlanarVelocity, Config.ShouldMockGravity);
+        }
+
+        #endregion UnityBehavior
+
+        #region PrivateMethods
+
+        [ServerRpc]
+        private void _HandleLocomotionServerRpc(Vector3 planarVelocity, bool shouldMockGravity)
+        {
+            _HandleMove(planarVelocity);
+            _HandleRotation(planarVelocity);
+
+            if (shouldMockGravity)
             {
                 _MockGravity();
             }
@@ -25,20 +37,13 @@ namespace GamePlay.Capabilities
             }
         }
 
-        #endregion UnityBehavior
-
-        #region PrivateMethods
-
-        [ServerRpc]
-        private void _HandleMoveServerRpc(Vector3 planarVelocity, float moveAmount)
+        private void _HandleMove(Vector3 planarVelocity)
         {
             planarVelocity.y = 0;
             ActorBrain.ActorCharacterController.Move(planarVelocity * (Config.MoveSpeed * G.DeltaTime));
-            ActorBrain.AnimatorManager?.UpdateAnimatorMovementParameters(0, moveAmount);
         }
 
-        [ServerRpc]
-        private void _HandleRotationServerRpc(Vector3 planarVelocity)
+        private void _HandleRotation(Vector3 planarVelocity)
         {
             var rotationDirection = transform.InverseTransformDirection(planarVelocity);
             rotationDirection.y = 0;

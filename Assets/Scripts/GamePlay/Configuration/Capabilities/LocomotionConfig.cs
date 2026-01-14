@@ -2,7 +2,7 @@
 
 namespace GamePlay.Configuration.Capabilities
 {
-    [CreateAssetMenu(fileName = "LocomotionConfig", menuName = "Capabilities/LocomotionConfig")]
+    [CreateAssetMenu(fileName = "LocomotionConfig", menuName = "CapabilityConfig/LocomotionConfig")]
     public class LocomotionConfig : ScriptableObject
     {
         #region Fields

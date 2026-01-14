@@ -63,7 +63,14 @@ namespace GamePlay.GameState
             var spawnPosition  = _PlayerSpawnPoints[Random.Range(0, _PlayerSpawnPoints.Length)];
             var playerInstance = Instantiate(PlayerPrefab, spawnPosition.position, Quaternion.identity);
 
+            var oldPlayer = NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject;
             playerInstance.SpawnAsPlayerObject(clientId);
+            playerInstance.gameObject.name = "Player: " + clientId;
+
+            if (oldPlayer != null && oldPlayer != playerInstance)
+            {
+                oldPlayer.Despawn();
+            }
         }
 
         #endregion PrivateMethods

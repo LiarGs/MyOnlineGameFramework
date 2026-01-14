@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 namespace GamePlay.UserInput
 {
-    public class UserController : MonoBehaviour
+    public class UserInput : MonoBehaviour
     {
         #region UnityBehavior
 
@@ -123,7 +123,7 @@ namespace GamePlay.UserInput
 
         #region Fields
 
-        internal static UserController Instance;
+        internal static UserInput Instance;
 
         private UserInputController _InputController;
         private InputDevice         _CurrentControllerDevice;

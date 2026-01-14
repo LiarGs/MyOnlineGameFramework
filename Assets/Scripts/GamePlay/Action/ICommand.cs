@@ -1,4 +1,4 @@
-﻿using GamePlay.Objects.Actors;
+﻿using GamePlay.Actors;
 
 namespace GamePlay.Action
 {

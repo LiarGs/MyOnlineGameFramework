@@ -26,7 +26,8 @@ namespace CameraUtils
 
         #region Porperties
 
-        public Camera MainCamera { get; set; }
+        public Camera             MainCamera          { get; set; }
+        public ICinemachineCamera ActiveVirtualCamera => CineMachineBrain.ActiveVirtualCamera;
 
         #endregion Porperties
 
@@ -34,7 +35,7 @@ namespace CameraUtils
 
         public static MainCameraWrapper Instance;
 
-        public CinemachineVirtualCamera CineMachineVirtualCamera;
+        public CinemachineBrain CineMachineBrain;
 
         #endregion Fields
     }
