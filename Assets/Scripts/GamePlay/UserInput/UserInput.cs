@@ -25,6 +25,7 @@ namespace GamePlay.UserInput
             _InputController.GamePlay.Move.performed     += _OnMovePerformed;
             _InputController.GamePlay.Move.canceled      += _OnMoveCanceled;
             _InputController.GamePlay.Look.performed     += _OnLookPerformed;
+            _InputController.GamePlay.Look.canceled      += _OnLookCanceled;
             _InputController.GamePlay.Interact.performed += _OnInteractPerformed;
             _InputController.UI.Cancel.performed         += _OnCancelPerformed;
         }
@@ -34,6 +35,7 @@ namespace GamePlay.UserInput
             _InputController.GamePlay.Move.performed     -= _OnMovePerformed;
             _InputController.GamePlay.Move.canceled      -= _OnMoveCanceled;
             _InputController.GamePlay.Look.performed     -= _OnLookPerformed;
+            _InputController.GamePlay.Look.canceled      -= _OnLookCanceled;
             _InputController.GamePlay.Interact.performed -= _OnInteractPerformed;
             _InputController.UI.Cancel.performed         -= _OnCancelPerformed;
             _InputController.Disable();
@@ -74,6 +76,12 @@ namespace GamePlay.UserInput
         private void _OnLookPerformed(InputAction.CallbackContext context)
         {
             _CameraInput = context.ReadValue<Vector2>();
+            _CheckInputDeviceChange(context);
+        }
+
+        private void _OnLookCanceled(InputAction.CallbackContext context)
+        {
+            _CameraInput = Vector2.zero;
             _CheckInputDeviceChange(context);
         }
 

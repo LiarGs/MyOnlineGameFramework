@@ -14,7 +14,7 @@ namespace GamePlay.Capabilities
         {
             if (!ActorBrain.IsOwner) return;
 
-            _HandleLocomotionServerRpc(PlanarVelocity, Config.ShouldMockGravity);
+            _HandleLocomotionServerRpc(PlanarVelocity, PlanarRotation, Config.ShouldMockGravity);
         }
 
         #endregion UnityBehavior
@@ -22,10 +22,10 @@ namespace GamePlay.Capabilities
         #region PrivateMethods
 
         [ServerRpc]
-        private void _HandleLocomotionServerRpc(Vector3 planarVelocity, bool shouldMockGravity)
+        private void _HandleLocomotionServerRpc(Vector3 planarVelocity, Vector3 planarRotation, bool shouldMockGravity)
         {
             _HandleMove(planarVelocity);
-            _HandleRotation(planarVelocity);
+            _HandleRotation(planarRotation);
 
             if (shouldMockGravity)
             {
@@ -43,9 +43,9 @@ namespace GamePlay.Capabilities
             ActorBrain.ActorCharacterController.Move(planarVelocity * (Config.MoveSpeed * G.DeltaTime));
         }
 
-        private void _HandleRotation(Vector3 planarVelocity)
+        private void _HandleRotation(Vector3 planarRotation)
         {
-            var rotationDirection = transform.InverseTransformDirection(planarVelocity);
+            var rotationDirection = transform.InverseTransformDirection(planarRotation);
             rotationDirection.y = 0;
             rotationDirection   = transform.TransformDirection(rotationDirection);
 
@@ -87,6 +87,7 @@ namespace GamePlay.Capabilities
 
         public Brain            ActorBrain;
         public Vector3          PlanarVelocity;
+        public Vector3          PlanarRotation;
         public Vector3          VerticalVelocity;
         public float            MoveAmount;
         public LocomotionConfig Config;

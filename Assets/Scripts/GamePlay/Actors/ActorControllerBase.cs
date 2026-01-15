@@ -11,6 +11,8 @@ namespace GamePlay.Actors
             _ActorBrain = actorBrain;
         }
 
+        public abstract void Init();
+
         public abstract void Dispose();
 
         #endregion PublicMethods

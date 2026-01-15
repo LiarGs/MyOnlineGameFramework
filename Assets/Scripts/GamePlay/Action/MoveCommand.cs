@@ -1,12 +1,10 @@
-﻿using System;
-using GamePlay.Actors;
+﻿using GamePlay.Actors;
 using GamePlay.Capabilities;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace GamePlay.Action
 {
-    public struct MoveCommand : ICommand
+    public readonly struct MoveCommand : ICommand
     {
         #region PublicMethods
 

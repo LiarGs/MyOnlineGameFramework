@@ -9,7 +9,9 @@ namespace GameData.Actors
     {
         public override ActorControllerBase CreateActorController(Brain actorBrain)
         {
-            return new ThirdPersonController(actorBrain);
+            return new ThirdPersonController(actorBrain, ThirdPersonCameraPrefab);
         }
+
+        public GameObject ThirdPersonCameraPrefab;
     }
 }

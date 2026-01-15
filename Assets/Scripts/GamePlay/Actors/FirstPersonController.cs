@@ -1,17 +1,19 @@
 ﻿using Cinemachine;
+using GameData.Actors;
 using GamePlay.Action;
 using UnityEngine;
 using Utils;
 
 namespace GamePlay.Actors
 {
-    public class ThirdPersonController : ActorControllerBase
+    public class FirstPersonController : ActorControllerBase
     {
         #region PublicMethods
 
-        public ThirdPersonController(Brain actorBrain, GameObject thirdPersonCameraPrefab) : base(actorBrain)
+        public FirstPersonController(Brain actorBrain, GameObject firstPersonCameraPrefab) :
+            base(actorBrain)
         {
-            _VirtualCameraPrefab = thirdPersonCameraPrefab;
+            _VirtualCameraPrefab = firstPersonCameraPrefab;
         }
 
         public override void Init()
@@ -25,7 +27,7 @@ namespace GamePlay.Actors
         public override void Dispose()
         {
             G.UpdateRunner.Unsubscribe(_Tick);
-            Object.Destroy(_CinemachineVirtualCamera.gameObject);
+            Object.Destroy(_VirtualCamera.gameObject);
         }
 
         #endregion PublicMethods
@@ -34,16 +36,16 @@ namespace GamePlay.Actors
 
         private void _SetupCamera()
         {
-            _CinemachineVirtualCamera = Object.Instantiate(_VirtualCameraPrefab, G.MainCamera.transform.parent)
+            _VirtualCamera = Object.Instantiate(_VirtualCameraPrefab, _ActorBrain.LookAtPos)
                 .GetComponent<CinemachineVirtualCamera>();
-
-            _CinemachineVirtualCamera.Follow = _ActorBrain.transform;
-            _CinemachineVirtualCamera.LookAt = _ActorBrain.LookAtPos;
+            _HorizontalSpeed = _VirtualCamera.GetCinemachineComponent<CinemachinePOV>().m_VerticalAxis.m_MaxSpeed;
+            _VirtualCamera.transform.localPosition = Vector3.zero;
         }
 
         private void _Tick(float deltaTime)
         {
             _HandleMove();
+            _HandleLook(deltaTime);
         }
 
         private void _HandleMove()
@@ -55,7 +57,13 @@ namespace GamePlay.Actors
                             moveDirection;
 
             _ActorBrain.ExecuteCommand(new MoveCommand(moveDirection, G.UserInput.MoveAmount));
-            _ActorBrain.ExecuteCommand(new RotateCommand(moveDirection));
+        }
+
+        private void _HandleLook(float deltaTime)
+        {
+            var rotation = Vector3.up * G.UserInput.CameraHorizontalInput * _HorizontalSpeed * deltaTime;
+
+            _ActorBrain.transform.Rotate(rotation);
         }
 
         #endregion PrivateMethods
@@ -63,7 +71,8 @@ namespace GamePlay.Actors
         #region Fields
 
         private readonly GameObject               _VirtualCameraPrefab;
-        private          CinemachineVirtualCamera _CinemachineVirtualCamera;
+        private          CinemachineVirtualCamera _VirtualCamera;
+        private          float                    _HorizontalSpeed;
 
         #endregion Fields
     }

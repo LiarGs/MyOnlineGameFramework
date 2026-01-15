@@ -10,7 +10,12 @@ namespace GamePlay.Actors
 
         public TestAIController(Brain actorBrain) : base(actorBrain)
         {
+        }
+
+        public override void Init()
+        {
             if (!_ActorBrain.IsOwner) return;
+
             G.UpdateRunner.Subscribe(_Tick, 0);
             Debug.Log("AI Controller initialized.");
         }

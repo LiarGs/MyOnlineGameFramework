@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3df428834ea4e7aacfc8162e5b89469, type: 3}
-  m_Name: ThirdPersonController
+  m_Script: {fileID: 11500000, guid: 572b8c81d6e442a6a62cde4b8fe048ca, type: 3}
+  m_Name: FirstPersonControllerConfig
   m_EditorClassIdentifier: 
-  ThirdPersonCameraPrefab: {fileID: 2460325157987083836, guid: 7e349d44d06cc83458ee3480b0d7d3b3,
+  FirstPersonCameraPrefab: {fileID: 8165501629306166998, guid: 21d4bd76c83c6b042915241b94f812ca,
     type: 3}

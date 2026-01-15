@@ -20,7 +20,7 @@ namespace GamePlay.Managers
 
             if (_Locomotion)
             {
-                _UpdateMovementParametersServerRpc(0, _Locomotion.MoveAmount);
+                _UpdateMovementParameters(0, _Locomotion.MoveAmount);
             }
         }
 
@@ -28,8 +28,7 @@ namespace GamePlay.Managers
 
         #region PrivateMethods
 
-        [ServerRpc]
-        private void _UpdateMovementParametersServerRpc(float horizontal, float vertical)
+        private void _UpdateMovementParameters(float horizontal, float vertical)
         {
             Animator.SetFloat(HorizontalHash, horizontal, 0.1f, G.DeltaTime);
             Animator.SetFloat(VerticalHash,   vertical,   0.1f, G.DeltaTime);

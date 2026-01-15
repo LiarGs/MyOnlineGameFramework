@@ -18,7 +18,7 @@ namespace ConnectionManagement
         {
             if (Instance != null && Instance != this)
             {
-                Destroy(Instance.gameObject);
+                Destroy(gameObject);
                 return;
             }
 

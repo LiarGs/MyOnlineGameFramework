@@ -5,6 +5,7 @@ using GamePlay.Action;
 using GamePlay.Capabilities;
 using GamePlay.Managers;
 using Unity.Netcode;
+using UnityEditor;
 using UnityEngine;
 
 namespace GamePlay.Actors
@@ -38,12 +39,20 @@ namespace GamePlay.Actors
             base.OnDestroy();
         }
 
-        private void OnValidate()
-        {
-            if (!Application.isPlaying) return;
-
-            _ResetController();
-        }
+//         private void OnValidate()
+//         {
+//             if (!Application.isPlaying) return;
+//
+// #if UNITY_EDITOR
+//             EditorApplication.delayCall += () =>
+//             {
+//                 // 再次检查空引用，防止在这个等待期间物体被删了
+//                 if (this == null) return;
+//
+//                 _ResetController();
+//             };
+// #endif
+//         }
 
         #endregion UnityBehaviour
 
@@ -91,11 +100,13 @@ namespace GamePlay.Actors
             }
         }
 
+        [ContextMenu("Reset Controller")]
         private void _ResetController()
         {
             _CurrentActorController?.Dispose();
 
             _CurrentActorController = ActorControllerConfig?.CreateActorController(this);
+            _CurrentActorController?.Init();
         }
 
         #endregion PrivateMethods
@@ -105,7 +116,6 @@ namespace GamePlay.Actors
         public ActorControllerConfigBase ActorControllerConfig;
         public Transform                 LookAtPos;
         public CharacterController       ActorCharacterController;
-        public AnimatorManagerBase       AnimatorManager;
 
         private          ActorControllerBase              _CurrentActorController;
         private readonly Dictionary<Type, CapabilityBase> _CapabilityMap = new Dictionary<Type, CapabilityBase>();

@@ -3310,8 +3310,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4434699109632432476}
   - component: {fileID: 5815873253595911704}
-  - component: {fileID: 5864542934884236174}
-  - component: {fileID: 5338173544727711706}
+  - component: {fileID: 3975921399714629350}
+  - component: {fileID: 1479951769998947653}
   - component: {fileID: 6727626418035006984}
   - component: {fileID: 6679965576633557935}
   - component: {fileID: 6125361166986893722}
@@ -3338,6 +3338,7 @@ Transform:
   - {fileID: 1402338114830432322}
   - {fileID: 8095335138523846360}
   - {fileID: 3600524910435393033}
+  - {fileID: 7453307849964086979}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5815873253595911704
@@ -3361,7 +3362,7 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &5864542934884236174
+--- !u!114 &3975921399714629350
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3392,7 +3393,7 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &5338173544727711706
+--- !u!114 &1479951769998947653
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3401,7 +3402,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5125544697369303024}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Script: {fileID: 11500000, guid: d70c4427187b4bb6a2d8a7cbd99411c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   TransitionStateInfoList: []
@@ -3418,11 +3419,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9f5cee6a221493dad9828f22dc11e20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ActorControllerConfig: {fileID: 11400000, guid: 8c5dcfbbbdc859942bfe1c4dddccff41,
+  ActorControllerConfig: {fileID: 11400000, guid: d4575d2f41551b041821e91955ebc5ff,
     type: 2}
-  LookAtPos: {fileID: 1402338114830364026}
+  LookAtPos: {fileID: 7453307849964086979}
   ActorCharacterController: {fileID: 6125361166986893722}
-  AnimatorManager: {fileID: 2017249305303040159}
 --- !u!95 &6679965576633557935
 Animator:
   serializedVersion: 5
@@ -3516,6 +3516,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ActorBrain: {fileID: 6727626418035006984}
   PlanarVelocity: {x: 0, y: 0, z: 0}
+  PlanarRotation: {x: 0, y: 0, z: 0}
   VerticalVelocity: {x: 0, y: 0, z: 0}
   MoveAmount: 0
   Config: {fileID: 11400000, guid: 0cdc739a6d0adb748bb5e839c9ba7fff, type: 2}
@@ -3565,6 +3566,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ActorBrain: {fileID: 6727626418035006984}
   Animator: {fileID: 6679965576633557935}
+--- !u!1 &8592447561931589979
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7453307849964086979}
+  m_Layer: 0
+  m_Name: LookAt
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7453307849964086979
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8592447561931589979}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.7, z: 0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4434699109632432476}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8756646083021904456
 GameObject:
   m_ObjectHideFlags: 0
