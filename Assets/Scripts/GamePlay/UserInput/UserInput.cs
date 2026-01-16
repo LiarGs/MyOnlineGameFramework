@@ -87,7 +87,7 @@ namespace GamePlay.UserInput
 
         private void _OnInteractPerformed(InputAction.CallbackContext context)
         {
-            // TODO: 互动逻辑
+            OnInteractPerformed?.Invoke();
             _CheckInputDeviceChange(context);
         }
 
@@ -130,6 +130,8 @@ namespace GamePlay.UserInput
         #endregion Porperties
 
         #region Fields
+
+        public event System.Action OnInteractPerformed;
 
         internal static UserInput Instance;
 

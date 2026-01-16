@@ -24,6 +24,8 @@ namespace GamePlay.Actors
 
         public override void Dispose()
         {
+            if (!_ActorBrain.IsOwner) return;
+
             G.UpdateRunner.Unsubscribe(_Tick);
             Object.Destroy(_CinemachineVirtualCamera.gameObject);
         }

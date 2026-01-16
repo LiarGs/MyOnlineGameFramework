@@ -14,7 +14,7 @@ namespace ConnectionManagement.ConnectionStates
 
         public override void Enter()
         {
-            G.SceneLoaderWrapper.LoadScene(_DemoSceneName, useNetworkSceneManager: true);
+            G.SceneLoaderWrapper.LoadScene(_LobbySceneName, useNetworkSceneManager: true);
         }
 
         public override void Exit()
@@ -112,7 +112,7 @@ namespace ConnectionManagement.ConnectionStates
         // used in ApprovalCheck. This is intended as a bit of light protection against DOS attacks that rely on sending silly big buffers of garbage.
         private const int _MaxConnectPayload = 1024;
 
-        private const string _DemoSceneName = "Demo";
+        private const string _LobbySceneName = "Lobby";
 
         #endregion Fields
     }
