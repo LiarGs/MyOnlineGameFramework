@@ -76,42 +76,4 @@ namespace ConnectionManagement
 
         #endregion Fields
     }
-
-    /// <summary>
-    /// Simple IP connection setup with UTP
-    /// </summary>
-    class ConnectionMethodIP : ConnectionMethodBase
-    {
-        #region PublicMethods
-
-        public ConnectionMethodIP(string ip, ushort port, string playerName) : base(playerName)
-        {
-            _Ipaddress = ip;
-            _Port      = port;
-        }
-
-        public override Task SetupHostConnectionAsync()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override Task SetupClientConnectionAsync()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override Task<(bool success, bool shouldTryAgain)> SetupClientReconnectionAsync()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        #endregion PublicMethods
-
-        #region Fields
-
-        private string _Ipaddress;
-        private ushort _Port;
-
-        #endregion Fields
-    }
 }

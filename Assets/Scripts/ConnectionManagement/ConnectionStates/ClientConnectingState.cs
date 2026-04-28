@@ -13,33 +13,15 @@ namespace ConnectionManagement.ConnectionStates
     {
         #region PublicMethods
 
-        public ClientConnectingState Configure(ConnectionMethodBase baseConnectionMethod)
+        public ClientConnectingState Configure(ConnectionMethodBase connectionMethod)
         {
-            _ConnectionMethod = baseConnectionMethod;
+            _ConnectionMethod = connectionMethod;
             return this;
         }
 
         public override void Enter()
         {
-            try
-            {
-                // NGO's StartClient launches everything
-                if (!G.NetworkManager.StartClient())
-                {
-                    throw new Exception("NetworkManager StartClient failed");
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("Error connecting client, see following exception");
-                Debug.LogException(e);
-                _StartingClientFailed();
-                throw;
-            }
-
-// #pragma warning disable 4014
-//             ConnectClientAsync();
-// #pragma warning restore 4014
+            _ConnectClientAsync();
         }
 
         public override void Exit()
@@ -58,7 +40,11 @@ namespace ConnectionManagement.ConnectionStates
             _StartingClientFailed();
         }
 
-        internal async Task ConnectClientAsync()
+        #endregion PublicMethods
+
+        #region PrivateMethods
+
+        private async void _ConnectClientAsync()
         {
             try
             {
@@ -79,10 +65,6 @@ namespace ConnectionManagement.ConnectionStates
                 throw;
             }
         }
-
-        #endregion PublicMethods
-
-        #region PrivateMethods
 
         private static void _StartingClientFailed()
         {

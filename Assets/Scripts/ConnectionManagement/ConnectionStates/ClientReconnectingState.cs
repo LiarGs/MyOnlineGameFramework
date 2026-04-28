@@ -120,8 +120,8 @@ namespace ConnectionManagement.ConnectionStates
             if (!reconnectingSetupTask.IsFaulted && reconnectingSetupTask.Result.success)
             {
                 // If this fails, the OnClientDisconnect callback will be invoked by Netcode
-                var connectingTask = ConnectClientAsync();
-                yield return new WaitUntil(() => connectingTask.IsCompleted);
+                // var connectingTask = _ConnectClientAsync();
+                // yield return new WaitUntil(() => connectingTask.IsCompleted);
             }
             else
             {

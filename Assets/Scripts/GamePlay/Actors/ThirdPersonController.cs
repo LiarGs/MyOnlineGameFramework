@@ -27,7 +27,7 @@ namespace GamePlay.Actors
             if (!_ActorBrain.IsOwner) return;
 
             G.UpdateRunner.Unsubscribe(_Tick);
-            Object.Destroy(_CinemachineVirtualCamera.gameObject);
+            Object.Destroy(_VirtualCamera.gameObject);
         }
 
         #endregion PublicMethods
@@ -36,11 +36,11 @@ namespace GamePlay.Actors
 
         private void _SetupCamera()
         {
-            _CinemachineVirtualCamera = Object.Instantiate(_VirtualCameraPrefab, G.MainCamera.transform.parent)
+            _VirtualCamera = Object.Instantiate(_VirtualCameraPrefab, G.MainCamera.transform.parent)
                 .GetComponent<CinemachineVirtualCamera>();
 
-            _CinemachineVirtualCamera.Follow = _ActorBrain.transform;
-            _CinemachineVirtualCamera.LookAt = _ActorBrain.LookAtPos;
+            _VirtualCamera.Follow = _ActorBrain.transform;
+            _VirtualCamera.LookAt = _ActorBrain.LookAtPos;
         }
 
         private void _Tick(float deltaTime)
@@ -65,7 +65,7 @@ namespace GamePlay.Actors
         #region Fields
 
         private readonly GameObject               _VirtualCameraPrefab;
-        private          CinemachineVirtualCamera _CinemachineVirtualCamera;
+        private          CinemachineVirtualCamera _VirtualCamera;
 
         #endregion Fields
     }

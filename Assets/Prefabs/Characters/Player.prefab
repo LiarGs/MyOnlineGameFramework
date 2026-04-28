@@ -3353,7 +3353,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1876477236
+  GlobalObjectIdHash: 2088884088
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -3419,7 +3419,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9f5cee6a221493dad9828f22dc11e20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ActorControllerConfig: {fileID: 11400000, guid: d4575d2f41551b041821e91955ebc5ff,
+  ActorControllerConfig: {fileID: 11400000, guid: 8c5dcfbbbdc859942bfe1c4dddccff41,
     type: 2}
   LookAtPos: {fileID: 7453307849964086979}
   ActorCharacterController: {fileID: 6125361166986893722}

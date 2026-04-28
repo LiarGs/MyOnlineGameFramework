@@ -13,15 +13,15 @@ namespace ConnectionManagement.ConnectionStates
     {
         #region PublicMethods
 
-        public StartingHostState Configure(ConnectionMethodBase baseConnectionMethod)
+        public StartingHostState Configure(ConnectionMethodBase connectionMethod)
         {
-            _ConnectionMethod = baseConnectionMethod;
+            _ConnectionMethod = connectionMethod;
             return this;
         }
 
         public override void Enter()
         {
-            _StartHost();
+            _StartHostAsync();
         }
 
         public override void Exit()
@@ -63,11 +63,11 @@ namespace ConnectionManagement.ConnectionStates
 
         #region PrivateMethods
 
-        private static void _StartHost()
+        private async void _StartHostAsync()
         {
             try
             {
-                // await _ConnectionMethod.SetupHostConnectionAsync();
+                await _ConnectionMethod.SetupHostConnectionAsync();
 
                 // NGO's StartHost launches everything
                 if (!G.NetworkManager.StartHost())
